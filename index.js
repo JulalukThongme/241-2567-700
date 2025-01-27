@@ -24,4 +24,3 @@ function submitData(){
     }
     console.log('submitData',userData);
 }
-
