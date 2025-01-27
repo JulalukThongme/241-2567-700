@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html Lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            display: flex;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        
+        
+        
+        
+        .container .item {
+            padding: 10px;
+            background-color: yellow;
+            flex: 1;
+        }
+        /*tablet style*/
+        @media screen and (max-width:768px) {
+            .container { 
+                flex-direction: column;
+            }
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        /*mobile style*/
+        @media screen and (max-width: 640px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="item">Item1</div>
+        <div class="item2">Item2</div>
+    </div>
+    <div class="grid-container">
+        <div class="item">Item1</div>
+        <div class="item">Item2</div>
+        <div class="item">Item3</div>
+        <div class="item">Item4</div>
+        <div class="item">Item5</div>
+        <div class="item">Item6</div>
+    </div>
+
+
+
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html Lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>Hello World</div>
+    ตวามสนใจ
+    <input type="checkbox" name="interest" value="อ่านหนังสือ"> อ่านหนังสือ
+    <input type="checkbox" name="interest" value="ดูหนัง"> ดูหนัง
+    <input type="checkbox" name="interest" value="ฟังเพลง"> อ่านหนังสือ
+    <script>
+        let checkboxInputs = document.querySelectorAll('input[name="interestt"]');
+            for (let i = 0; i < checkboxInputs.length; i++) {
+                console.log(checkboxInputs[1].value);
+            };
+    </script>
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html Lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<button onclick="userClick()">Click me</button>
+<div onclick="userClickdiv()">div Click</div>
+<script>
+    function userClick() {
+        console.log("button click");
+    }
+    function userClickdiv() {
+        console.log("div Click");
+    }
+</script>
+</body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html Lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="radio" name="gender" value="ชาย" onchange="ChangeGender()"> ชาย
+    <input type="radio" name="gender" value="หญิง" onchange="ChangeGender()"> หญิง
+    <input type="radio" name="gender" value="อื่นๆ" onchange="ChangeGender()"> อื่นๆ
+    
+    <script>
+        function ChangeGender() {
+            console.log('change gender')
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+<!DOCTYPE html>
+<html Lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="radio" name="gender" value="ชาย" onchange="ChangeGender()"> ชาย
+    <input type="radio" name="gender" value="หญิง" onchange="ChangeGender()"> หญิง
+    <input type="radio" name="gender" value="อื่นๆ" onchange="ChangeGender()"> อื่นๆ
+    
+    <script>
+        function ChangeGender() {
+            //เลือก gender ทุก input ออกมา
+            let genderInputs = document.querySelectorAll('input[name=gender]');
+            let gender = '';
+            //ใครมี check หมายความว่าเพศนั้นถูกเลือก
+            for (let i =0; i < genderInputs.length; i++) {
+                if (genderInputs[i].checked) {
+                    gender = genderInputs[i].value
+                }
+            }
+            console.log('selected gender', gender);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+<!DOCTYPE html>
+<html Lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    ชื่อ <input type="text" name="firstname" onkeypress="changeFirstName()">
+
+    <script>
+        function changeFirstName() {
+            // เลือกไปยัง input firstname
+            let firstnameDOM = document.querySelector('input[name=firstname]')
+            // เอา value ของ firstname ออกมา
+                console.log('change firstname', firstnameDOM.value)
+//onkeypress onkeydown onkeyup
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html Lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <div 
+   onmouseover="overitem()"
+   onmouseup="upitem()"
+   onmousedown="downitem()">
+   click here</div>
+
+   <script>
+    function overitem() {
+        console.log('mouse over')
+    }
+    function upitem() {
+        console.log('mouse up')
+    }
+    function downitem() {
+        console.log('mouse down')
+    }
+   </script>
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html Lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="hello">hello <span style="display: none;">abc</span></div>
+    <script>
+        let helloDOM = document.getElementById('hello');
+        console.log(helloDOM.textContent);
+        console.log(helloDOM.innerText);
+        console.log(helloDOM.innerHTML);
+    </script>
+</body>
+</html>
