@@ -1,76 +1,148 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
+const BASE_URL = 'http://localhost:8000'
+let mode = 'CREATE' //default mode
+let selectedId=''
 
-const port = 8000;
-app.use(bodyParser.json());
+window.onload = async () => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const id = urlParams.get('id')
+    console.log('id',id)
+    if(id){
+        mode = 'EDIT'
+        selectedId = id
 
-let users = []
-let counter = 1
+        //1. เราจะดึงข้อมูล user ที่ต้องการแก้ไข
+        try{
+            const response = await axios.get('${BASE_URL/users/$')
+            console.log('data',response.data)
 
-/*
-GET /users สำหรับ get users ทั้งหมดที่บันทึกไว้
-POST /users สำหรับสร้าง users ใหม่บันทึกเข้าไป
-GET /users/:id สำหรับดึง users รายคนออกมา
-PUT /users/:id สำหรับแก้ไข users รายคน (ตาม id ที่บันทึกเข้าไป)
-DELETE /users/:id สำหรับลบ users รายคน (ตาม id ที่บันทึกเข้าไป)
-*/
-// path: /users ใช้สำหรัยแสดงข้อมูล user ทั้งหมด
-app.get('/users', (req, res) => {
-    res.json(users);
-})
-//path: /user ใช้สำหรับสร้างข้อมูล user
-app.post('/user', (req, res) => {
-    let user = req.body;
-    user.id =counter
-    counter += 1
-    users.push(user);
-    res.json({
-        message: 'Create new user successfully',
-        user: user
-    });
-})
+        let firstNameDOM = document.querySelector('input[name=firstname]')
+        let lastNameDOM = document.querySelector('input[name=lastname]')
+        let ageDOM = document.querySelector('input[name=age]')
+        let descriptionDOM = document.querySelector('textarea[name=description]')
 
-//path: PUT /user/:id ใช้สำหรับแก้ไขข้อมูล user โดยใช้ id เป็นตัวระบุ
-app.put('/user/:id', (req, res) => {
-    let id = req.params.id;
-    let updateUser = req.body;
-    //หา user จาก id ที่ส่งมา
-    let selectedIndex = users.findIndex(users => user.id == id)
-    
-    //แก้ไขข้อมูล user ที่หาเจอ
-    if (updateUser.firstname) {
-        users[selectedIndex].firstname = updateUser.firstname
-    }
-    if (updateUser.lastname) {
-        users[selectedIndex].lastname = updateUser.lastname
-    }
-    res.json({
-        message: 'Update user successfully',
-        data: {
-            user: updateUser,
-            indexUpdated: selectedIndex
+        firstNameDOM.value = user.firstName
+        lastNameDOM = user.lastName
+        ageDOM.value = user.age
+        descriptionDOM.value = user.description
+
+        let genderDOM = document.querySelector('input[name=gender]') || {}
+        let interestDOMs = document.querySelectorAll('input[name=interest]')|| {}
+
+        for (let i = 0; i < genderDOMs.length; i++) {
+            if (genderDOMs[i].value == user.gender) {
+                genderDOMs[i].checked = true
+            }
         }
-    })
-    //users ที่ update ใหม่ update กลับไปเก็บใน users เดิม
+        for (let i = 0; i < interestDOMs.length; i++) {
+            if (user.interests.includes(interestDOMs[i].value)){
+                interestDOMs[i].checked = true
+            }
+        }
+
+        } catch (error) {
+            console.log('error',error)
+        }
+    }
+}
+
+const validateData = (userData) => {
+    let errors = []
+    if(!userData.firstName) {
+        errors.push('กรุณากรอกชื่อ')
+    }
+    if(!userData.lastName) {
+        errors.push('กรุณากรอกนามสกุล')
+    }
+    if(!userData.age) {
+        errors.push('กรุณากรอกอายุ')
+    }
+    if(!userData.gender) {
+        errors.push('กรุณาเลือกเพศ')
+    }
+    if(!userData.interests) {
+        errors.push('กรุณาเลือกความสนใจ')
+    }
+    if(!userData.description) {
+        errors.push('กรุณากรอกข้อมูลตัวเอง')
+    }
+    return errors
+}
+const submitData = async () => {
+    let firstNameDOM = document.querySelector('input[name=firstname]')
+    let lastNameDOM = document.querySelector('input[name=lastname]')
+    let ageDOM = document.querySelector('input[name=age]')
+    let genderDOM = document.querySelector('input[name=gender]:checked') || {}
+    let interestDOMs = document.querySelectorAll('input[name=interest]:checked')|| {}
+    let descriptionDOM = document.querySelector('textarea[name=description]')
+
+    let messageDoM= document.getElementById('message')
+    try{
     
-    //path: DELETE /user/:id ใช้สำหรับลบข้อมูล user โดยใช้ id เป็นตัวระบุ
-app.delete('/user/:id', (req, res) => {
-    let id = req.params.id;
-    //หา index ของ user ที่ต้องการลบ
-    let selectedIndex = users.findIndex (user => user.id == id)
+    let interest = ''
 
-    //ลบ
-    users.splice(selectedIndex, 1)
-    res.json({
-        message: 'Delete user successfully',
-        indexDeleted: selectedIndex
-    })
-})
+    for(let i = 0; i < interestDOMs.length; i++) {
+        interest += interestDOMs[i].value
+        if(i < interestDOMs.length -1){
+            interest += ','
+        }
+    }
 
-    res.send(id)
-})
+    let userData ={
+        firstName : firstNameDOM.value,
+        lastName : lastNameDOM.value,
+        age : ageDOM.value,
+        gender : genderDOM.value,
+        description : descriptionDOM.value, 
+        interests : interest
 
-app.listen(port, (req, res) => {
-    console.log('Http Server is running on port' + port)
-});
+    }
+    console.log('submitData',userData)
+
+    let message = 'บันทึกข้อมูลเรียบร้อย'
+    if (mode == 'CREATE') {
+        const response = await axios.post('${BASE_URL}/users', userData)
+        console.log('response', response.data);
+    } else {
+        const response = await axios.put('${BASE_URL}/users/${selectedId}', userData)
+        message = 'แก้ไขข้อมูลเรียบร้อย'
+        console.log('response', response.data);
+    }
+
+    messageDOM.innerText = message
+    messageDOM.class.className = 'message success'
+    const errors = validateData(userData)
+    
+    if(errors.length > 0) {
+        //มี error
+        throw{
+            message: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+            errors: errors
+        }
+    }
+    
+        const response = await axios.post('http://localhost:8000/users', userData)
+        console.log('response',response.data)
+        messageDoM.innerText = 'บันทึกข้อมูลเรียบร้อย'
+        messageDoM.className = 'message success'
+    }catch (error){
+        console.log('error message',error.message)
+        console.log('error',error.errors)
+        if (error.response){
+            console.log(error.response)
+            error.message = error.response.data.message
+            error.errors = error.response.data.errors
+        }
+        
+        let htmlData = '<div>'
+        htmlData += `<div>${error.message}</div>`
+        htmlData += '<ul>'
+        for(let i = 0; i < error.errors.length; i++) {
+            htmlData += `<li>${error.errors[i]}</li>`
+        }
+        htmlData += '</ul>'
+        htmlData += '</div>'
+    
+        messageDoM.innerHTML = htmlData
+        messageDoM.className = 'message danger'    
+    }
+}
